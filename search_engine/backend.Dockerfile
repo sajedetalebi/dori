@@ -1,12 +1,15 @@
-FROM python:3.9-bullseye
+FROM python:3.9-alpine
 
 WORKDIR /app
 
-# Install dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+# Install build dependencies
+RUN apk add --no-cache \
     gcc \
-    python3-dev
+    musl-dev \
+    python3-dev \
+    libffi-dev \
+    openssl-dev \
+    cargo
 
 # Set environment variables
 ENV PIP_DEFAULT_TIMEOUT=100 \
