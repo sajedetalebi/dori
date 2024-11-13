@@ -1,14 +1,9 @@
-FROM python:3.9-slim
+FROM python:3.9-bullseye
 
 WORKDIR /app
 
-# Update GPG keys and install dependencies
-RUN apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    apt-get update --fix-missing && \
-    apt-get install -y gnupg2 && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 648ACFD622F3D138 && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0E98404D386FA1D9 && \
+# Install dependencies
+RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     gcc \
     python3-dev
