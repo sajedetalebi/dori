@@ -2,24 +2,22 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
-# Install system dependencies
+# Install only essential build dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    curl \
-    build-essential \
-    pkg-config \
-    git
+    gcc \
+    python3-dev
 
-# Install Rust for ARM64
-ENV RUSTUP_HOME=/usr/local/rustup \
-    CARGO_HOME=/usr/local/cargo \
-    PATH=/usr/local/cargo/bin:$PATH
+# Set environment variables
+ENV PIP_DEFAULT_TIMEOUT=100 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1
 
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | \
-    sh -s -- -y --default-toolchain stable --target aarch64-unknown-linux-gnu
-
+# Update pip and install requirements
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir tokenizers --prefer-binary && \
+    pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
