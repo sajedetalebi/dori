@@ -19,8 +19,7 @@ ENV PATH="/root/.cargo/bin:${PATH}" \
     PIP_NO_CACHE_DIR=1
 
 COPY requirements.txt .
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip
 
 COPY . .
 
